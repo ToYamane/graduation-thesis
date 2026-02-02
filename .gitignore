@@ -1,0 +1,33 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+~$*
+nul
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Generated files (keep slide.pdf as output)
+slide.html
+slide.pptx
+
+# Data files (large)
+data/raw/
+data/LIST_v1-2.parquet
+*.csv
+*.xlsx
+
+# Outputs (keep figures)
+outputs/*.csv
+outputs/*.json

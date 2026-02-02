@@ -1,0 +1,297 @@
+% !TEX program = xelatex
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% 日本語（XeLaTeX）
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setmainfont{CMU Serif}
+\IfFontExistsTF{Noto Serif CJK JP}{\setCJKmainfont{Noto Serif CJK JP}}{%
+  \IfFontExistsTF{Source Han Serif JP}{\setCJKmainfont{Source Han Serif JP}}{%
+    \IfFontExistsTF{HaranoAjiMincho}{\setCJKmainfont{HaranoAjiMincho}}{%
+      \setCJKmainfont{IPAMincho}% last-resort fallback
+    }%
+  }%
+}%
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% 見た目（標準テーマ）
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.25ex,left]{author in head/foot}%
+      \hspace*{1ex}卒論中間発表
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.25ex,right]{date in head/foot}%
+      2025/12/08\; 20154073\; 山根聡展\hspace*{1ex}
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+% 画像が無い場合でもコンパイルを止めない
+\newcommand{\safeincludegraphics}[2][]{%
+  \IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{Missing file: \texttt{#2}}}%
+}
+
+\title{クリオダイナミクスを用いた\\ローマ帝国衰退の数理モデリング}
+\subtitle{構造的デモグラフィ理論による3世紀の危機の検証}
+\author{東京農工大学 環境哲学4年\\山根 聡展}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{本日の流れ}
+  \begin{enumerate}
+    \item 背景・問題設定（3世紀の危機）
+    \item 研究問い／仮説（人口×気候×農業生産力）
+    \item 先行研究（SDT・Seshat・定量モデル）
+    \item データと観測指標（プロキシ）
+    \item 数理モデルと検証計画
+    \item 今後のスケジュール
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{研究背景}{歴史学における課題}
+  \begin{itemize}
+    \item 文献史学による定性的な解釈が主流
+    \item 複雑な因果関係の客観的な検証が困難
+  \end{itemize}
+
+  \vspace{0.8em}
+  \textbf{本研究の目的}
+  \begin{itemize}
+    \item \textbf{クリオダイナミクス}（歴史動力学）の手法を導入
+    \item ローマ帝国の衰退過程を\textbf{再現可能な数理モデル}として記述する
+    \item 特に「3世紀の危機」における崩壊メカニズムを検証する
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{3世紀の危機（235--284年）}
+  \begin{itemize}
+    \item 政治的混乱・経済破綻・外敵侵入が複合し、帝国が崩壊の瀬戸際に瀕した時期。
+  \end{itemize}
+
+  \vspace{0.6em}
+  \textbf{本研究で扱う観点（本発表では人口×気候×農業を主軸）}
+  \begin{enumerate}
+    \item 政治的不安定（皇帝交代・内戦）
+    \item 人口・社会動態（扶養力、死亡率、移動）
+    \item 気候・農業生産力（食料供給ショック）
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{研究問い}
+  \textbf{RQ}：気候変動に起因する農業生産力の低下は、人口と国家能力を通じて、
+  3世紀の危機（235--284年）の政治的不安定をどの程度説明できるか？
+
+  \vspace{0.8em}
+  \textbf{この問いのポイント}
+  \begin{itemize}
+    \item 「気候が悪い」ではなく、\textbf{どの経路で}政治危機に結びつくかを明示する
+    \item 観測可能な指標（プロキシ）に落として\textbf{検証可能}にする
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{研究仮説（人口×気候×農業生産力）}
+  \textbf{主仮説}：気候変動（降水・気温）による\textbf{農業生産力の低下}が、人口（扶養力）と国家財政を通じて不安定化を増幅し、
+  3世紀の危機（235--284年）の政治的混乱を説明できる。
+
+  \vspace{0.6em}
+  \textbf{検証したい因果鎖（最小モデル）}
+  \begin{center}
+    \small
+    気候 $\rightarrow$ 収穫（食料供給） $\rightarrow$ 生活水準／死亡率 $\rightarrow$ 人口 $\rightarrow$ 徴税・兵站 $\rightarrow$ 政治不安定
+  \end{center}
+
+  \vspace{0.4em}
+  \begin{itemize}
+    \item 目的：気候ショックを入れたときに、人口・不安定度の時系列が危機期と整合するか。
+    \item 対立仮説（比較）：疫病ショック主導／外敵圧力主導（気候は二次要因）。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{クリオダイナミクス：源流（前史）}
+  \begin{itemize}
+    \item \textbf{数量史（cliometrics）}：経済史を中心に、統計・計量で史実を検証する流れ。
+    \item \textbf{歴史の巨視的理論（macrosociology）}：国家形成・崩壊・革命などを比較史で説明する流れ。
+    \item \textbf{複雑系・文化進化の視点}：社会を相互作用する要素の集合（動的システム）として捉える。
+  \end{itemize}
+
+  \vspace{0.6em}
+  \textbf{要点}：既存の数量史・比較史を\textbf{「動学モデル＋大規模データ」}で接続し、仮説を競争させる。
+\end{frame}
+
+\begin{frame}{クリオダイナミクス：成立過程（2000年代〜）}
+  \begin{itemize}
+    \item ピーター・ターチンが生態学・数理モデルの発想を社会史へ移し、
+      \textbf{長期の社会変動を説明する数理枠組み}を体系化（Turchin 2003）。
+    \item \textbf{「Cliodynamics」}という名称が学術的に広まる契機として、
+      \emph{Nature} にて「歴史を分析・予測科学へ」という主張を提示（Turchin 2008）。
+    \item 2010年にオープンアクセス誌 \emph{Cliodynamics} が創刊され、
+      「理論・数理モデル・データベース」を扱う場が制度化。
+    \item 2011年に \textbf{Seshat} が設立され、比較可能な歴史変数の体系的収集が加速。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{クリオダイナミクス：現在の動向（何が新しいか）}
+  \begin{itemize}
+    \item \textbf{データ駆動}：Seshatのような大規模データにより、理論を統計的に検証・比較できる。
+    \item \textbf{モデル多様化}：連立方程式だけでなく、
+      ベイズ推定・因果推論・エージェントベースモデル等を併用する方向。
+    \item \textbf{再現性}：変数定義・根拠・コードの共有（オープンサイエンス）を重視。
+    \item \textbf{論点}：データの不確実性（欠測・地域偏り）と、モデルの単純化の妥当性が評価点。
+  \end{itemize}
+
+  \vspace{0.4em}
+  \textbf{本研究との接続}：気候 $C(t)$ を外生入力として、農業 $A(t)$・人口 $N(t)$・不安定度 $I(t)$ の連鎖を\textbf{検証可能な形}で実装する。
+\end{frame}
+
+\begin{frame}{先行研究（理論：SDT／クリオダイナミクス）}
+  \begin{itemize}
+    \item \textbf{人口・エリート・国家（財政）}の相互作用を、非線形フィードバックとして扱う枠組みがSDT。
+    \item Goldstone (1991) の人口圧力・都市化・財政危機・エリート分裂という説明を、動学モデルとして一般化（Turchin 2003; Turchin \& Nefedov 2009）。
+    \item 本研究は、SDTの発想を参考にしつつ、\textbf{気候→農業→人口}の経路を明示して検証する。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{先行研究（データ基盤：Seshat）}
+  \begin{itemize}
+    \item 歴史・考古学の知見を\textbf{比較可能な変数}として整理し、理論検証（統計・シミュレーション）を可能にする枠組み。
+    \item 本研究では、ローマのマクロ変数参照や他地域との比較可能性の確保に利用する。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{先行研究（ローマ帝国の定量モデル例）}
+  \begin{itemize}
+    \item Roman \& Palmer (2019) は、西ローマ帝国の\textbf{軍隊規模・領土・貨幣}を連立方程式で結合。
+    \item 本研究への示唆：\textbf{複数系列（人口・農業・政治不安定）を同時に整合させる}設計が重要。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{データと観測指標（プロキシ）}
+  \textbf{データソース（既に挙げたもの）}
+  \begin{itemize}
+    \item Seshat: Global History Databank
+    \item OXREP（難破船などの経済・交易データ）
+    \item ADS（銀貨成分分析：補助的に使用）
+  \end{itemize}
+
+  \vspace{0.6em}
+  \textbf{この発表で主に使いたい指標}
+  \begin{itemize}
+    \item 人口 $N$：人口推計、都市規模推計、碑文頻度（入手可能な範囲）
+    \item 気候 $C$：古気候復元（降水・気温の近似）
+    \item 農業 $A$：穀物価格、交易活動度（難破船など）、土地利用指標（可能なら）
+    \item 不安定度 $I$：皇帝交代頻度・内戦／簒奪イベント数
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{システム構成とアルゴリズム（モデル）}
+  \textbf{方針}
+  \begin{itemize}
+    \item 目的変数：不安定度 $I(t)$ を人口・農業・国家能力の関数として表す
+    \item 外生入力：気候 $C(t)$
+    \item 内生状態：人口 $N(t)$、農業生産力 $A(t)$（扶養力）、国家ストレス $S(t)$（近似）
+  \end{itemize}
+
+  \vspace{0.6em}
+  \textbf{実装}
+  \begin{itemize}
+    \item Pythonで年単位の数値計算、パラメータ探索（フィット）
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{検証計画（最小構成）}
+  \begin{enumerate}
+    \item 観測系列の整備：$N(t)$, $C(t)$, $A(t)$, $I(t)$ を同一時間軸へ
+    \item 推定：モデル出力が $N(t)$ と $I(t)$ を同時に近似するようにパラメータ同定
+    \item 比較：
+      \begin{itemize}
+        \item 気候ショックあり／なし
+        \item 疫病ショック主導（対立仮説）との当てはまり比較
+      \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+
+  \vspace{0.6em}
+
+\begin{frame}{今後のスケジュール}
+  \begin{itemize}
+    \item 先行研究の深堀り：気候・農業・人口のプロキシ選定と入手
+    \item モデル実装：気候入力 $C(t)$ を含む最小モデルのプロトタイプ
+    \item 検証：人口 $N(t)$ と不安定度 $I(t)$ の同時フィット／感度分析
+    \item 論文執筆：結果・考察・限界（データ不確実性）を明記
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{参考文献}
+  \begin{thebibliography}{99}
+    \bibitem{turchin2024jp}
+      ピーター・ターチン.
+      \newblock 『エリート過剰生産が国家を滅ぼす』.
+      \newblock 早川書房, 2024.
+
+    \bibitem{turchinNefedov2009}
+      Peter Turchin and Sergey A. Nefedov.
+      \newblock \emph{Secular Cycles}.
+      \newblock Princeton University Press, 2009.
+
+    \bibitem{turchin2003}
+      Peter Turchin.
+      \newblock \emph{Historical Dynamics: Why States Rise and Fall}.
+      \newblock Princeton University Press, 2003.
+
+    \bibitem{turchin2008}
+      Peter Turchin.
+      \newblock ``Arise `cliodynamics'.''
+      \newblock \emph{Nature} 454, 34--35, 2008.
+      \newblock DOI: 10.1038/454034a.
+
+    \bibitem{goldstone1991}
+      Jack A. Goldstone.
+      \newblock \emph{Revolution and Rebellion in the Early Modern World}.
+      \newblock University of California Press, 1991.
+
+    \bibitem{turchin2015seshat}
+      Peter Turchin et al.
+      \newblock ``Seshat: The Global History Databank.''
+      \newblock \emph{Cliodynamics} 6(1):77--107, 2015.
+      \newblock DOI: 10.21237/C7clio6127917.
+
+    \bibitem{turchin2020introSeshat}
+      Peter Turchin et al.
+      \newblock ``An Introduction to Seshat: Global History Databank.''
+      \newblock \emph{Journal of Cognitive Historiography}, 2020.
+      \newblock DOI: 10.1558/jch.39395.
+
+    \bibitem{roman2019}
+      Sabin Roman and Erika Palmer.
+      \newblock ``The Growth and Decline of the Western Roman Empire: Quantifying the Dynamics of Army Size, Territory, and Coinage.''
+      \newblock \emph{Cliodynamics} 10(2), 2019.
+      \newblock DOI: 10.21237/C7CLIO10243683.
+
+    \bibitem{pontingButcher2015dataset}
+      Matthew Ponting and Kevin Butcher.
+      \newblock \emph{Analysis of Roman Silver Coins, Augustus to the Reform of Trajan (27 BC--AD 100)} [data set].
+      \newblock Archaeology Data Service (updated 2015).
+      \newblock DOI: 10.5284/1035238.
+
+    \bibitem{diamond2006jp}
+      ジャレド・ダイアモンド.
+      \newblock 『文明崩壊』（上・下）.
+      \newblock 草思社, 2006.
+  \end{thebibliography}
+\end{frame}
+
+\end{document}
